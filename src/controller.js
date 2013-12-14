@@ -88,11 +88,9 @@ JLD.mousedown = function(x,y){
 			var yP = particle.y;
 			var r = particle.r;
 
-			var dx = x-xP;
-			var dy = y-yP;
-			// console.log(dx,dy,r);
-			// if(dx*dx + dy*dy < r*r) {
-			if(Math.abs(dx) < r && Math.abs(dy) < r) {
+			var dx = (x-xP)*w/((w+h)/2);
+			var dy = (y-yP)*h/((w+h)/2);
+			if(dx*dx + dy*dy < r*r) {
 				JLD.clickParticle(key);
 				break;
 			}
