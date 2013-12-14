@@ -57,6 +57,14 @@ JLD.gameLoop = function(time) {
 	JLD.lastFrameTime = time;
 };
 
+JLD.clickParticle = function(pKey) {
+
+	console.log("click", pKey);
+
+
+};
+
+
 JLD.mousemove = function(x,y){
 	var w = JLD.canvas.width;
 	var h = JLD.canvas.height;
@@ -68,6 +76,28 @@ JLD.mousedown = function(x,y){
 	JLD.mousePos = {'x':x,'y':y};
 	JLD.mouseDownPos = {'x':x,'y':y};
 	JLD.mouseState = "down";
+
+	var w = JLD.canvas.width;
+	var h = JLD.canvas.height;
+
+	for(var key in JLD.particles) {
+		if(JLD.particles.hasOwnProperty(key)) {
+			var particle = JLD.particles[key];
+
+			var xP = particle.x;
+			var yP = particle.y;
+			var r = particle.r;
+
+			var dx = x-xP;
+			var dy = y-yP;
+			// console.log(dx,dy,r);
+			// if(dx*dx + dy*dy < r*r) {
+			if(Math.abs(dx) < r && Math.abs(dy) < r) {
+				JLD.clickParticle(key);
+				break;
+			}
+		}
+	}
 };
 
 JLD.mouseup = function(x,y) {
@@ -123,7 +153,6 @@ JLD.initEvents = function(){
 
 		var w = JLD.canvas.width;
 		var h = JLD.canvas.height;
-
 		JLD.mouseup(x/w,y/h);
 	});
 };

@@ -11,12 +11,12 @@ JLD.updateModel = function(dt) {
 
 JLD.randomAddParticles = function(dt) {
 
-	if(Math.random() < dt/100) {
+	if(Math.random() < dt/500) {
 		JLD.particles[Math.random()*1000000|0] = {
 			x: Math.random(),
 			y: -1+Math.random(),
-			vY: 0.001 * Math.random(),
-			r: 0.015 * Math.random()
+			vY: 0.0002 * Math.random(),
+			r: 0.035 * Math.random()+0.01
 		}
 	}
 

@@ -25,10 +25,12 @@ JLD.drawGame = function() {
 
 			var x = particle.x * w;
 			var y = particle.y * h;
-			var r = particle.r * w;
+			var r = particle.r * (w+h)/2;
+
+			if(y + r < 0 || y - r > h) {continue;}
 
 			ctx.moveTo(x,y);
-			ctx.arc(x+r,y+r,r,2*Math.PI,0,false);
+			ctx.arc(x,y,r,2*Math.PI,0,false);
 		}
 	}
 
