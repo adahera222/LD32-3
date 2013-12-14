@@ -6,6 +6,8 @@ JLD.lastFrameTime = 0;
 JLD.mousePos = {'x':0.5,'y':0.5};
 JLD.mouseState = "up";
 
+JLD.particles = {};
+
 JLD.level = 0;
 JLD.time = 0;
 
@@ -35,15 +37,23 @@ JLD.gameLoop = function(time) {
 	JLD.time = time;
 
 	if(JLD.dirtyCanvas){
-		JLD.dirtyCanvas = false;
+		// JLD.dirtyCanvas = false;
 
 		JLD.drawClear();
 		JLD.drawGame();
 	}
 
+
 	requestNextAnimationFrame(JLD.gameLoop);
 
 	JLD.frameRenderTime = time - JLD.lastFrameTime;
+	
+	if(JLD.frameRenderTime > 100){
+		JLD.frameRenderTime = 100;
+	}
+	JLD.randomAddParticles(JLD.frameRenderTime);
+	JLD.updateModel(JLD.frameRenderTime);
+	
 	JLD.lastFrameTime = time;
 };
 
