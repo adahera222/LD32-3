@@ -29,7 +29,7 @@ JLD.sum = {n:0,d:1};
 JLD.main = function() {
 	JLD.startSession();
 
-	requestNextAnimationFrame(JLD.gameLoop);
+	requestAnimationFrame(JLD.gameLoop);
 };
 
 window.onload = JLD.main;
@@ -73,7 +73,7 @@ JLD.gameLoop = function(time) {
 		}
 	}
 
-	requestNextAnimationFrame(JLD.gameLoop);
+	requestAnimationFrame(JLD.gameLoop);
 
 	JLD.frameRenderTime = time - JLD.lastFrameTime;
 	
