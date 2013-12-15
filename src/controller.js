@@ -8,10 +8,13 @@ JLD.mouseState = "up";
 
 JLD.particles = {};
 
+JLD.viewPage = "game";
+
 JLD.level = 0;
 JLD.time = 0;
 
 JLD.score = 0;
+JLD.topScore = 0;
 
 JLD.sum = {n:0,d:1};
 
@@ -43,20 +46,27 @@ JLD.gameLoop = function(time) {
 	if(JLD.dirtyCanvas){
 		// JLD.dirtyCanvas = false;
 
-		JLD.drawClear();
-		JLD.drawGame();
+		if(JLD.viewPage == "game") {
+			JLD.drawClear();
+			JLD.drawGame();
+		}else if(JLD.viewPage == "menu") {
+			JLD.drawClear();
+			JLD.drawMenu();
+		}
 	}
-
 
 	requestNextAnimationFrame(JLD.gameLoop);
 
 	JLD.frameRenderTime = time - JLD.lastFrameTime;
 	
-	if(JLD.frameRenderTime > 100){
+	if(JLD.frameRenderTime > 100) {
 		JLD.frameRenderTime = 100;
 	}
-	JLD.randomAddParticles(JLD.frameRenderTime);
-	JLD.updateModel(JLD.frameRenderTime);
+
+	if(JLD.viewPage == "game") {
+		JLD.randomAddParticles(JLD.frameRenderTime);
+		JLD.updateModel(JLD.frameRenderTime);
+	}
 	
 	JLD.lastFrameTime = time;
 };
@@ -74,6 +84,13 @@ JLD.clickParticle = function(pKey) {
 	}
 };
 
+JLD.startNewGame = function() {
+	JLD.sum = {n:0,d:1};
+	JLD.particles = {};
+	JLD.score = 0;
+	JLD.viewPage = "game";
+};
+
 JLD.getOne = function() {
 	JLD.sum = {n:0,d:1};
 	JLD.score++;
@@ -87,8 +104,11 @@ JLD.lose = function() {
 };
 
 JLD.saveStats = function() {
+	if(JLD.score > JLD.topScore) {
+		JLD.topScore = JLD.score;
+	}
 
-
+	//TODO: localstorage
 };
 
 JLD.mousemove = function(x,y){
@@ -98,11 +118,7 @@ JLD.mousemove = function(x,y){
 	JLD.mousePos = {'x':x,'y':y};
 };
 
-JLD.mousedown = function(x,y){
-	JLD.mousePos = {'x':x,'y':y};
-	JLD.mouseDownPos = {'x':x,'y':y};
-	JLD.mouseState = "down";
-
+JLD.gameMousedown = function(x,y) {
 	var w = JLD.canvas.width;
 	var h = JLD.canvas.height;
 
@@ -121,6 +137,25 @@ JLD.mousedown = function(x,y){
 				break;
 			}
 		}
+	}
+};
+
+JLD.menuMousedown = function(x,y) {
+	var w = JLD.canvas.width;
+	var h = JLD.canvas.height;
+
+	JLD.startNewGame();
+};
+
+JLD.mousedown = function(x,y) {
+	JLD.mousePos = {'x':x,'y':y};
+	JLD.mouseDownPos = {'x':x,'y':y};
+	JLD.mouseState = "down";
+
+	if(JLD.viewPage == "game") {
+		JLD.gameMousedown(x,y);
+	}else if(JLD.viewPage == "menu") {
+		JLD.menuMousedown(x,y);
 	}
 };
 

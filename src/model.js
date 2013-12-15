@@ -69,6 +69,7 @@ JLD.randomAddParticles = function(dt) {
 			vY: 0.00015 * Math.random(),
 			vX: 0.0001 * (Math.random()-0.5),
 			r: 0.02 * Math.random()+0.02,
+			color: JLD.scoreColors[JLD.score % JLD.scoreColors.length],
 			value: {n: 1, d: denoms[denoms.length*Math.random()|0]}
 		}
 	}
