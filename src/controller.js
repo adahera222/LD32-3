@@ -13,7 +13,7 @@ JLD.viewPage = "game";
 JLD.level = 0;
 JLD.time = 0;
 
-JLD.score = 0;
+JLD.score = 10;
 JLD.topScore = 0;
 
 JLD.sum = {n:0,d:1};

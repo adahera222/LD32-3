@@ -99,7 +99,7 @@ JLD.drawProgress = function() {
 	var r1 = 0.8*Math.min(w/2,h/2);
 	var r2 = 0.85*r1;
 
-	ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+	ctx.strokeStyle = 'rgba(0,0,0,1)';
 	ctx.fillStyle = 'gray';
 	if(JLD.score > 0){
 		ctx.fillStyle = JLD.scoreColors[(JLD.score-1) % JLD.scoreColors.length];
@@ -111,7 +111,7 @@ JLD.drawProgress = function() {
 	ctx.moveTo(w/2+r2,h/2);
 	ctx.arc(w/2,h/2,r2,2*Math.PI,0,true);
 	// ctx.closePath();
-	// ctx.stroke();
+	ctx.stroke();
 	ctx.fill();
 
 	var speed = Math.max(0,(JLD.score-3)/50);
@@ -126,6 +126,15 @@ JLD.drawProgress = function() {
 	ctx.arc(w/2,h/2,r2,a,offset,true);
 	ctx.closePath();
 	ctx.fill();
+
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+
+	ctx.fillStyle = 'steelblue';
+	ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
+
+	ctx.fillText(JLD.sum.n,w/2,h/2-r2*0.5);
+	ctx.fillText(JLD.sum.d,w/2,h/2+r2*0.5);
 
 	ctx.restore();
 };
@@ -148,17 +157,19 @@ JLD.drawMenu = function() {
 
 	ctx.fillStyle = 'steelblue';
 	ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
-	ctx.fillText("You Only Get One",w/2,h*0.3);
+	ctx.fillText("\"You Only Get One\"",w/2,h*0.3);
 
+	// ctx.fillStyle = 'black';
 	ctx.font = 0.04*(w+h)/2 + "px Lucida Console";
-	ctx.fillText("Top Score: " + JLD.topScore,w/2,h*0.65);
+	ctx.fillText("Top Score: " + JLD.topScore,w/2,h*0.4);
 
+	// ctx.fillStyle = 'steelblue';
 	ctx.font = 0.04*(w+h)/2 + "px Lucida Console";
 	ctx.fillText("(Click To Play)",w/2,h*0.8);
 
 	ctx.textAlign = "right";
 	ctx.font = 0.02*(w+h)/2 + "px Lucida Console";
-	ctx.fillText("Ludum Dare 28, created by Joe McCourt",w*0.95,h*0.95);
+	ctx.fillText("For Ludum Dare 28, created by Joe McCourt",w*0.95,h*0.95);
 	
 	ctx.restore();
 };
@@ -170,7 +181,6 @@ JLD.scoreColors = [
 	"rgb(217, 15,90)",
 	"rgb(243, 71, 57)",
 	"rgb(255,110, 39)",
-	"rgb(170,255,  0)",
 	"rgb(255,170,  0)",
 	"rgb(170,  0,255)",
 	"rgb(0,170,255)"

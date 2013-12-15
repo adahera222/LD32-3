@@ -58,19 +58,42 @@ JLD.getPrimeFactors = function(n) {
 	return factors;
 };
 
+JLD.getGaussian = function(u,std) {
+	return u+std*Math.sqrt(-2*Math.log(Math.random()))*Math.cos(2*Math.PI*Math.random());
+};
+
+JLD.getLaplacian = function(u,b) {
+	return u-b*Math.log(1-Math.random());
+};
+
+
+JLD.getNewParticleFraction = function() {
+	var denoms = [2,3,4,5,6,7,8,9,10];
+	var nums = [1,2,3,4,5,6,7,8,9,10];
+
+	var mean = 0.5*JLD.score+1;
+	var b = mean*1.5;
+
+	var d = 2+(JLD.getLaplacian(mean,b)|0);
+	var n = d;
+
+	while(n >= d) {
+		n = 1+(JLD.getLaplacian(0,b)|0);
+	}
+
+	return {n:n,d:d};
+};
+
 JLD.randomAddParticles = function(dt) {
-
-	var denoms = [1,2,3,5,7,9];
-
 	if(Math.random() < dt/200) {
 		JLD.particles[Math.random()*1000000|0] = {
 			x: Math.random(),
 			y: -1+Math.random(),
-			vY: 0.00015 * Math.random(),
-			vX: 0.0001 * (Math.random()-0.5),
-			r: 0.02 * Math.random()+0.02,
-			color: JLD.scoreColors[JLD.score % JLD.scoreColors.length],
-			value: {n: 1, d: denoms[denoms.length*Math.random()|0]}
+			vY: 0.00005 * (0.5+0.5*Math.random()) * (JLD.score*0.3+1),
+			vX: 0.0001 * (Math.random()-0.5) * (JLD.score*0.3+1),
+			r: 0.04,
+			// color: JLD.scoreColors[JLD.score % JLD.scoreColors.length],
+			value: JLD.getNewParticleFraction()
 		}
 	}
 
