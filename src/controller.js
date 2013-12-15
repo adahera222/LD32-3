@@ -261,87 +261,34 @@ function supports_html5_storage() {
 	}
 }
 
-// Reprinted from Core HTML5 Canvas
-// By David Geary
-window.requestNextAnimationFrame =
-	 (function () {
-			var originalWebkitRequestAnimationFrame = undefined,
-					wrapper = undefined,
-					callback = undefined,
-					geckoVersion = 0,
-					userAgent = navigator.userAgent,
-					index = 0,
-					self = this;
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
-			// Workaround for Chrome 10 bug where Chrome
-			// does not pass the time to the animation function
-			
-			if (window.webkitRequestAnimationFrame) {
-				 // Define the wrapper
-
-				 wrapper = function (time) {
-					 if (time === undefined) {
-							time = +new Date();
-					 }
-					 self.callback(time);
-				 };
-
-				 // Make the switch
-					
-				 originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;    
-
-				 window.webkitRequestAnimationFrame = function (callback, element) {
-						self.callback = callback;
-
-						// Browser calls the wrapper and wrapper calls the callback
-						
-						originalWebkitRequestAnimationFrame(wrapper, element);
-				 }
-			}
-
-			// Workaround for Gecko 2.0, which has a bug in
-			// mozRequestAnimationFrame() that restricts animations
-			// to 30-40 fps.
-
-			if (window.mozRequestAnimationFrame) {
-				 // Check the Gecko version. Gecko is used by browsers
-				 // other than Firefox. Gecko 2.0 corresponds to
-				 // Firefox 4.0.
-				 
-				 index = userAgent.indexOf('rv:');
-
-				 if (userAgent.indexOf('Gecko') != -1) {
-						geckoVersion = userAgent.substr(index + 3, 3);
-
-						if (geckoVersion === '2.0') {
-							 // Forces the return statement to fall through
-							 // to the setTimeout() function.
-
-							 window.mozRequestAnimationFrame = undefined;
-						}
-				 }
-			}
-			
-			return window.requestAnimationFrame   ||
-				 window.webkitRequestAnimationFrame ||
-				 window.mozRequestAnimationFrame    ||
-				 window.oRequestAnimationFrame      ||
-				 window.msRequestAnimationFrame     ||
-
-				 function (callback, element) {
-						var start,
-								finish;
-
-
-						window.setTimeout( function () {
-							 start = +new Date();
-							 callback(start);
-							 finish = +new Date();
-
-							 self.timeout = 1000 / 60 - (finish - start);
-
-						}, self.timeout);
-				 };
-			}
-	 )
-();
+// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+ 
+// MIT license
+ 
+(function() {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+ 
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+ 
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
