@@ -8,12 +8,20 @@ JLD.mouseState = "up";
 
 JLD.particles = {};
 
-JLD.viewPage = "game";
+JLD.animationPhase = ""; // "starting", "won", "lost"
+JLD.animationTimeStart = 0;
+JLD.animationPhaseTimes = {
+	"starting": 500,
+	"won": 500,
+	"lost": 3000
+};
+
+JLD.viewPage = "menu";
 
 JLD.level = 0;
 JLD.time = 0;
 
-JLD.score = 10;
+JLD.score = 0;
 JLD.topScore = 0;
 
 JLD.sum = {n:0,d:1};
@@ -42,6 +50,16 @@ JLD.startSession = function() {
 JLD.gameLoop = function(time) {
 	var ctx = JLD.ctx;
 	JLD.time = time;
+	if(JLD.animationPhase !== "") {
+		var dTime = JLD.animationPhaseTimes[JLD.animationPhase];
+		if(dTime < time - JLD.animationTimeStart) {
+			if(JLD.animationPhase == "lost") {
+				JLD.viewPage = "menu";
+			}
+
+			JLD.animationPhase = "";
+		}
+	}
 
 	if(JLD.dirtyCanvas){
 		// JLD.dirtyCanvas = false;
@@ -94,13 +112,18 @@ JLD.startNewGame = function() {
 JLD.getOne = function() {
 	JLD.sum = {n:0,d:1};
 	JLD.score++;
+	JLD.animationTimeStart = JLD.time;
+	JLD.animationPhase = "won";
 	JLD.saveStats();
 };
 
 JLD.lose = function() {
-	JLD.sum = {n:0,d:1};
-	JLD.score = 0;
-	JLD.viewPage = "menu";
+	// JLD.sum = {n:0,d:1};
+	// JLD.score = 0;
+	// JLD.viewPage = "menu";
+
+	JLD.animationTimeStart = JLD.time;
+	JLD.animationPhase = "lost";
 };
 
 JLD.saveStats = function() {
@@ -152,7 +175,7 @@ JLD.mousedown = function(x,y) {
 	JLD.mouseDownPos = {'x':x,'y':y};
 	JLD.mouseState = "down";
 
-	if(JLD.viewPage == "game") {
+	if(JLD.viewPage == "game" && JLD.animationPhase !== "lost") {
 		JLD.gameMousedown(x,y);
 	}else if(JLD.viewPage == "menu") {
 		JLD.menuMousedown(x,y);

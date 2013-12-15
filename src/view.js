@@ -18,6 +18,10 @@ JLD.drawParticles = function() {
 	var h = JLD.canvas.height;
 
 	ctx.fillStyle = JLD.scoreColors[JLD.score % JLD.scoreColors.length];
+	if(JLD.animationPhase == "lost"){
+		ctx.fillStyle = 'red';
+	}
+
 	ctx.beginPath();
 	for(var key in JLD.particles) {
 		if(JLD.particles.hasOwnProperty(key)) {
@@ -111,15 +115,20 @@ JLD.drawProgress = function() {
 	ctx.arc(w/2,h/2,r1,0,2*Math.PI,false);
 	ctx.moveTo(w/2+r2,h/2);
 	ctx.arc(w/2,h/2,r2,2*Math.PI,0,true);
-	// ctx.closePath();
-	ctx.stroke();
 	ctx.fill();
 
-	var speed = Math.max(0,(JLD.score-3)/50);
-	var offset = speed * JLD.time / 1000 % 2*Math.PI;
-	var a = 2*Math.PI * JLD.sum.n / JLD.sum.d + offset;
+	var speed = Math.max(0,JLD.score/50);
+	var offset = speed * JLD.time / 1000;
+	var ratio = JLD.sum.n / JLD.sum.d;
+	if(ratio > 1){ratio -= 1;}
+
+	var a = (2*Math.PI * ratio) + offset;
 
 	ctx.fillStyle = JLD.scoreColors[JLD.score % JLD.scoreColors.length];
+	if(JLD.animationPhase == "lost"){
+		ctx.fillStyle = 'red';
+	}
+
 	ctx.beginPath();
 	ctx.moveTo(w/2+r1*Math.cos(offset),h/2+r1*Math.sin(offset));
 	ctx.arc(w/2,h/2,r1,offset,a,false);
@@ -128,23 +137,43 @@ JLD.drawProgress = function() {
 	ctx.closePath();
 	ctx.fill();
 
+	ctx.beginPath();
+	ctx.moveTo(w/2+r1,h/2);
+	ctx.arc(w/2,h/2,r1,0,2*Math.PI,false);
+	ctx.moveTo(w/2+r2,h/2);
+	ctx.arc(w/2,h/2,r2,2*Math.PI,0,true);
+	ctx.stroke();	
+
 	ctx.textAlign = "center";
 	ctx.textBaseline = "alphabetic";
 
 	ctx.fillStyle = 'steelblue';
 	ctx.strokeStyle = 'steelblue';
-	ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
 
-	ctx.fillText(JLD.sum.n,w/2,h/2-r2*0.1);
+	if(JLD.animationPhase == "won") {
+		ctx.font = 0.2*(w+h)/2 + "px Lucida Console";
 
-	ctx.textBaseline = "top";
-	ctx.fillText(JLD.sum.d,w/2,h/2+r2*0.1);
-	ctx.beginPath();
+		ctx.textBaseline = "middle";
+		ctx.fillText("1",w/2,h/2+r2*0.1);
+	}else{
+		if(JLD.animationPhase == "lost"){
+			ctx.fillStyle = 'red';
+			ctx.strokeStyle = 'red';
+		}
 
-	ctx.lineWidth = 5;
-	ctx.moveTo(w/2-r2*0.35,h/2);
-	ctx.lineTo(w/2+r2*0.35,h/2);
-	ctx.stroke();
+		ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
+
+		ctx.fillText(JLD.sum.n,w/2,h/2-r2*0.1);
+
+		ctx.textBaseline = "top";
+		ctx.fillText(JLD.sum.d,w/2,h/2+r2*0.1);
+		ctx.beginPath();
+
+		ctx.lineWidth = 5;
+		ctx.moveTo(w/2-r2*0.35,h/2);
+		ctx.lineTo(w/2+r2*0.35,h/2);
+		ctx.stroke();
+	}
 
 	ctx.restore();
 };

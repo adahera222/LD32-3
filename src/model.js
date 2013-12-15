@@ -84,11 +84,14 @@ JLD.getNewParticleFraction = function() {
 	return {n:n,d:d};
 };
 
-JLD.randomAddParticles = function(dt) {
-	if(Math.random() < dt/200) {
+JLD.randomAddParticles = function(dt,start) {
+	var n = Object.keys(JLD.particles).length;
+
+	var start = n < 5;
+	if(Math.random() < dt/200 && n < 100 || n < 20) {
 		JLD.particles[Math.random()*1000000|0] = {
 			x: Math.random(),
-			y: -1+Math.random(),
+			y: (start?0:-1)+Math.random(),
 			vY: 0.00005 * (0.5+0.5*Math.random()) * (JLD.score*0.3+1),
 			vX: 0.0001 * (Math.random()-0.5) * (JLD.score*0.3+1),
 			r: 0.04,
