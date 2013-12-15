@@ -11,6 +11,8 @@ JLD.particles = {};
 JLD.level = 0;
 JLD.time = 0;
 
+JLD.sum = {n:0,d:1};
+
 JLD.main = function() {
 	JLD.startSession();
 
@@ -59,7 +61,11 @@ JLD.gameLoop = function(time) {
 
 JLD.clickParticle = function(pKey) {
 
-	console.log("click", pKey);
+	var sum = JLD.sum;
+	
+	JLD.sum = JLD.sumFractions(sum,JLD.particles[pKey].value)
+
+	console.log("sum",sum);
 
 
 };
