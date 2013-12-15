@@ -39,7 +39,7 @@ JLD.startSession = function() {
 	JLD.ctx = JLD.canvas.getContext("2d");
 
 	//JLD.setLevelRenderBox();
-	// JLD.loadGameState();
+	JLD.loadGameState();
 	JLD.resizeToFit();
 	// JLD.startLevel();
 
@@ -129,9 +129,8 @@ JLD.lose = function() {
 JLD.saveStats = function() {
 	if(JLD.score > JLD.topScore) {
 		JLD.topScore = JLD.score;
+		JLD.saveGameState();
 	}
-
-	//TODO: localstorage
 };
 
 JLD.mousemove = function(x,y){
@@ -237,6 +236,20 @@ JLD.initEvents = function(){
 		var h = JLD.canvas.height;
 		JLD.mouseup(x/w,y/h);
 	});
+};
+
+JLD.loadGameState = function(){
+	if (!supports_html5_storage()) { return false; }
+
+	var localTopScore = localStorage["JLD.topScore"];
+	if(typeof localTopScore === "string") {
+		JLD.topScore = JSON.parse(localTopScore);
+	}
+};
+
+JLD.saveGameState = function() {
+	if (!supports_html5_storage()) { return false; }
+	localStorage["JLD.topScore"] = JLD.topScore;
 };
 
 // *** LocalStorage Check ***

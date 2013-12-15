@@ -117,7 +117,7 @@ JLD.drawProgress = function() {
 	ctx.arc(w/2,h/2,r2,2*Math.PI,0,true);
 	ctx.fill();
 
-	var speed = Math.max(0,JLD.score/50);
+	var speed = Math.max(0,JLD.score/10);
 	var offset = speed * JLD.time / 1000;
 	var ratio = JLD.sum.n / JLD.sum.d;
 	if(ratio > 1){ratio -= 1;}
@@ -153,6 +153,7 @@ JLD.drawProgress = function() {
 	if(JLD.animationPhase == "won") {
 		ctx.font = 0.2*(w+h)/2 + "px Lucida Console";
 
+		ctx.fillStyle = 'rgba(0,255,0,0.5)';
 		ctx.textBaseline = "middle";
 		ctx.fillText("1",w/2,h/2+r2*0.1);
 	}else{
