@@ -197,7 +197,7 @@ JLD.drawMenu = function() {
 
 	ctx.fillStyle = 'steelblue';
 	ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
-	ctx.fillText("\"Sum To One\"",w/2,h*0.3);
+	ctx.fillText("Sum To One",w/2,h*0.25);
 
 	// ctx.fillStyle = 'black';
 	ctx.font = 0.04*(w+h)/2 + "px Lucida Console";

@@ -2,7 +2,7 @@
 Play at http://joemccourt.github.io/LD28/
 
 ###About
-Loosely inspired by the theme of 'you only get one', click on fractions to sum up to one.  If you go over one you lose!  It gets more difficult the further you get.
+Loosely inspired by the theme of 'you only get one', click on fractions to sum up to one.  If you go over one you lose!  It gets more difficult the higher your score.
 
 ###Instructions
 Click circles to add up to one.
