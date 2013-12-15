@@ -11,6 +11,8 @@ JLD.particles = {};
 JLD.level = 0;
 JLD.time = 0;
 
+JLD.score = 0;
+
 JLD.sum = {n:0,d:1};
 
 JLD.main = function() {
@@ -59,17 +61,35 @@ JLD.gameLoop = function(time) {
 	JLD.lastFrameTime = time;
 };
 
-JLD.clickParticle = function(pKey) {
+JLD.clickParticle = function(pKey) {	
+	JLD.sum = JLD.sumFractions(JLD.sum,JLD.particles[pKey].value)
 
-	var sum = JLD.sum;
-	
-	JLD.sum = JLD.sumFractions(sum,JLD.particles[pKey].value)
+	delete JLD.particles[pKey];
+	console.log("sum",JLD.sum);
 
-	console.log("sum",sum);
+	if(JLD.sum.n == JLD.sum.d) {
+		JLD.getOne();
+	}else if(JLD.sum.n > JLD.sum.d) {
+		JLD.lose();
+	}
+};
+
+JLD.getOne = function() {
+	JLD.sum = {n:0,d:1};
+	JLD.score++;
+	JLD.saveStats();
+};
+
+JLD.lose = function() {
+	JLD.sum = {n:0,d:1};
+	JLD.score = 0;
+	JLD.viewPage = "menu";
+};
+
+JLD.saveStats = function() {
 
 
 };
-
 
 JLD.mousemove = function(x,y){
 	var w = JLD.canvas.width;
