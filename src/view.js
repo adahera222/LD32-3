@@ -47,7 +47,7 @@ JLD.drawParticles = function() {
 
 	ctx.font = 0.025*(w+h)/2 + "px Lucida Console";
 
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = 'black';
 	ctx.beginPath();
 	for(var key in JLD.particles) {
 		if(JLD.particles.hasOwnProperty(key)) {
@@ -63,6 +63,7 @@ JLD.drawParticles = function() {
 			ctx.arc(x,y,r,2*Math.PI,0,false);
 
 			ctx.fillText(particle.value.n+"/"+particle.value.d,x,y);
+
 		}
 	}
 
@@ -128,13 +129,22 @@ JLD.drawProgress = function() {
 	ctx.fill();
 
 	ctx.textAlign = "center";
-	ctx.textBaseline = "middle";
+	ctx.textBaseline = "alphabetic";
 
 	ctx.fillStyle = 'steelblue';
+	ctx.strokeStyle = 'steelblue';
 	ctx.font = 0.08*(w+h)/2 + "px Lucida Console";
 
-	ctx.fillText(JLD.sum.n,w/2,h/2-r2*0.5);
-	ctx.fillText(JLD.sum.d,w/2,h/2+r2*0.5);
+	ctx.fillText(JLD.sum.n,w/2,h/2-r2*0.1);
+
+	ctx.textBaseline = "top";
+	ctx.fillText(JLD.sum.d,w/2,h/2+r2*0.1);
+	ctx.beginPath();
+
+	ctx.lineWidth = 5;
+	ctx.moveTo(w/2-r2*0.35,h/2);
+	ctx.lineTo(w/2+r2*0.35,h/2);
+	ctx.stroke();
 
 	ctx.restore();
 };
@@ -175,13 +185,17 @@ JLD.drawMenu = function() {
 };
 
 JLD.scoreColors = [
-	"rgb(255,  0,170)",
-	"rgb(51, 19, 39)",
-	"rgb(153, 23,102)",
-	"rgb(217, 15,90)",
-	"rgb(243, 71, 57)",
-	"rgb(255,110, 39)",
-	"rgb(255,170,  0)",
-	"rgb(170,  0,255)",
-	"rgb(0,170,255)"
+	"rgb(128,140,255)",
+	"rgb(193,128,255)",
+	"rgb(235,128,255)",
+	"rgb(255,128,215)",
+	"rgb(255,128,155)",
+	"rgb(255,169,128)",
+	"rgb(255,181,128)",
+	"rgb(255,223,128)",
+	"rgb(233,255,128)",
+	"rgb(167,255,128)",
+	"rgb(128,255,160)",
+	"rgb(128,255,232)",
+	"rgb(128,224,255)"
 ];
